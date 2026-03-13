@@ -12,5 +12,22 @@
     <button onclick="login()">Login</button>
 
     <script src="login.js"></script>
+
+
+    
+    <script>
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Simulate a login API call
+            if (username === "admin" && password === "admin123") {
+                localStorage.setItem("login", "true");
+                window.location = "dashboard.html";
+            } else {
+                document.getElementById("msg").innerText = "Invalid credentials";
+            }
+        }
+    </script>
 </body>
 </html>
