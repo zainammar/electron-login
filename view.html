@@ -1,65 +1,33 @@
-const db = require('./database.js');
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Records</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+        input { width: 90%; padding: 4px; }
+        button { margin-right: 5px; padding: 4px 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <script src="back.js"></script>
 
-// Load data from SQLite
-function loadData() {
-    db.all("SELECT * FROM staff", (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        let html = "";
-        rows.forEach(row => {
-            html += `
-                <tr>
-                    <td>${row.id}</td>
-                    <td><input id="name${row.id}" value="${row.name}"></td>
-                    <td><input id="email${row.id}" value="${row.email}"></td>
-                    <td><input id="phone${row.id}" value="${row.phone}"></td>
-                    <td>
-                        <button onclick="update(${row.id})">Save</button>
-                        <button onclick="remove(${row.id})">Delete</button>
-                    </td>
-                </tr>
-            `;
-        });
-        document.getElementById("tabledata").innerHTML = html;
-    });
-}
+<button onclick="window.history.back()">⬅ Back</button>
+<h2>Staff Records</h2>
 
-// Update record
-function update(id) {
-    const name = document.getElementById(`name${id}`).value;
-    const email = document.getElementById(`email${id}`).value;
-    const phone = document.getElementById(`phone${id}`).value;
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tabledata"></tbody>
+</table>
 
-    db.run("UPDATE staff SET name=?, email=?, phone=? WHERE id=?",
-        [name, email, phone, id],
-        function(err){
-            if (err) {
-                console.error(err);
-                alert("Update failed!");
-                return;
-            }
-            alert("Record updated successfully!");
-            loadData();
-        }
-    );
-}
-
-// Delete record
-function remove(id) {
-    if(!confirm("Are you sure you want to delete this record?")) return;
-
-    db.run("DELETE FROM staff WHERE id=?", [id], function(err){
-        if(err){
-            console.error(err);
-            alert("Delete failed!");
-            return;
-        }
-        alert("Record deleted!");
-        loadData();
-    });
-}
-
-// Initial load
-loadData();
+<script src="view.js"></script>
+</body>
+</html>
